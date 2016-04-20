@@ -52,8 +52,13 @@ public class Square {
     static final int COORDS_PER_VERTEX = 3; // nombre de coordonnées par vertex
     static final int COULEURS_PER_VERTEX = 4; // nombre de composantes couleur par vertex
 
-    private float posX = 0.0f;
-    private float posY = 1.0f;
+    private float posGlX = 0.0f;
+    private float posGlY = 0.0f;
+    private int posX = 0;
+    private int posY = 0;
+    private float width;
+    private float height;
+
     /* Attention au repère au niveau écran (x est inversé)
      Le tableau des coordonnées des sommets
      Oui ce n'est pas joli avec 0.2 en dur ....
@@ -89,6 +94,32 @@ public class Square {
         squareCoords[7] = -h_*2/h;
         squareCoords[9] = w_*2/w;
         squareCoords[10] = h_*2/h;
+
+        width = Math.abs(squareCoords[0]) + squareCoords[9];
+        height = squareCoords[1] + Math.abs(squareCoords[4]);
+
+        posGlX = 1.0f - (width/2.0f);
+        posGlY = 1.0f - (height/2.0f);
+    }
+
+    public Square(int w, int h, int x, int y) {
+        float w_ = w / 20;
+        float h_ = h / 44;
+
+        squareCoords[0] = -w_*2/w;
+        squareCoords[1] = h_*2/h;
+        squareCoords[3] = -w_*2/w;
+        squareCoords[4] = -h_*2/h;
+        squareCoords[6] = w_*2/w;
+        squareCoords[7] = -h_*2/h;
+        squareCoords[9] = w_*2/w;
+        squareCoords[10] = h_*2/h;
+
+        width = Math.abs(squareCoords[0]) + squareCoords[9];
+        height = squareCoords[1] + Math.abs(squareCoords[4]);
+
+        posGlX = (x+1)*(1.0f - (width/2.0f));
+        posGlY = (y+1)*(1.0f - (height/2.0f));
     }
 
     public void init() {
@@ -175,19 +206,10 @@ public class Square {
 
     }
 
-    public float getPosX() {
-        return posX;
-    }
+    public void moveDown() { posGlY -= height; }
+    public void moveRight() { posGlX -= width; }
+    public void moveLeft() { posGlX += width; }
 
-    public void setPosX(float posX) {
-        this.posX = posX;
-    }
-
-    public float getPosY() {
-        return posY;
-    }
-
-    public void setPosY(float posY) {
-        this.posY = posY;
-    }
+    public float getPosGlX() { return posGlX; }
+    public float getPosGlY() { return posGlY; }
 }

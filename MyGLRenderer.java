@@ -61,7 +61,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 
         for(Square s: mShapes) {
             Matrix.setIdentityM(mModelMatrix,0);
-            Matrix.translateM(mModelMatrix, 0, s.getPosX(), s.getPosY(), 0);
+            Matrix.translateM(mModelMatrix, 0, s.getPosGlX(), s.getPosGlY(), 0);
             Matrix.multiplyMM(scratch, 0, mMVPMatrix, 0, mModelMatrix, 0);
 
             s.draw(scratch);
