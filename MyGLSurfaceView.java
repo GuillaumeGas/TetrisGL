@@ -49,14 +49,14 @@ public class MyGLSurfaceView extends GLSurfaceView {
 
             if(y > (2*height/3)) {
                 mGame.moveDown();
-                requestRender();
             } else {
                 if(x < width/2) {
-                    mGame.moveRight();
-                } else {
                     mGame.moveLeft();
+                } else {
+                    mGame.moveRight();
                 }
             }
+            requestRender();
         }
 
         return true;

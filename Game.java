@@ -22,15 +22,15 @@ public class Game {
     }
 
     public void moveDown() {
-        current_piece.setPosY(current_piece.getPosY()-0.5f);
+        current_piece.setPosY(current_piece.getPosY() - 0.1f);
     }
 
     public void moveRight() {
-
+        current_piece.setPosX(current_piece.getPosX() - 0.1f);
     }
 
     public void moveLeft() {
-
+        current_piece.setPosX(current_piece.getPosX() + 0.1f);
     }
 
     public List<Square> getPieces() { return mPieces; }
