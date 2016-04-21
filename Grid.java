@@ -332,6 +332,7 @@ public class Grid {
             }
             if(full_line) {
                 lines_move_down_until(y);
+                score++;
             }
         }
     }
@@ -381,4 +382,5 @@ public class Grid {
         return height;
     }
 
+    public int getScore() { return score; }
 }

@@ -45,7 +45,11 @@ public class Game {
 
     public void moveDown() {
         grid.move_down();
-        if(grid.getCurrentPiece() == null) {
+        if(grid.is_game_over()) {
+            //view.showScore(grid.getScore());
+            grid.clear();
+            grid.init();
+        } else if(grid.getCurrentPiece() == null) {
             current_piece = new Piece();
             grid.add_current_piece(current_piece);
         }

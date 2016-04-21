@@ -9,6 +9,7 @@ import android.opengl.GLSurfaceView;
 import android.util.Log;
 import android.view.Display;
 import android.view.MotionEvent;
+import android.widget.Toast;
 
 /*
     Class MyGLSurfaceView : gère les évènements, créé le renderer
@@ -17,10 +18,12 @@ public class MyGLSurfaceView extends GLSurfaceView {
 
     private final MyGLRenderer mRenderer;
     private Game mGame;
+    private Context context;
 
     public MyGLSurfaceView(Context context) {
         super(context);
 
+        this.context = context;
         // Création d'un context OpenGLES 2.0
         setEGLContextClientVersion(2);
 
@@ -64,4 +67,12 @@ public class MyGLSurfaceView extends GLSurfaceView {
         return true;
     }
 
+    public void showScore(int score) {
+        int duration = Toast.LENGTH_SHORT;
+        String text_score = "Votre score est de " + Integer.toString(score) + " ! ";
+
+        //Toast toast = Toast.makeText(context, text_score, duration);
+        //toast.show();
+        System.out.println(text_score);
+    }
 }

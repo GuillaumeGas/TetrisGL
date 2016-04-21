@@ -22,8 +22,8 @@ public class Piece {
         start_flood_coord[0] = 0;
         start_flood_coord[1] = 0;
         generate();
-        posX = 0;
-        posY = 3;
+        posX = 4;
+        posY = 0;
     }
 
     public void generate() {
