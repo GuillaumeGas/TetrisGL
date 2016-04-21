@@ -2,32 +2,75 @@ package fr.univ_orleans.info.tetrisgl;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Created by Guillaume on 19/04/2016.
  */
 public class Game {
 
-    private List<Square> mPieces;
-    private Square current_piece;
-    private int mWidth;
-    private int mHeight;
+    private Grid grid;
+    private Piece current_piece;
+    private int screen_width;
+    private int screen_height;
+    private Timer timer;
+    private MyGLSurfaceView view;
+
+    public Game(MyGLSurfaceView v) {
+        view = v;
+    }
 
     public void init(int w, int h) {
-        mWidth = w;
-        mHeight = h;
-        mPieces = new LinkedList<>();
-        mPieces.add(new Square(mWidth, mHeight));
-        current_piece = mPieces.get(0);
+        screen_width = w;
+        screen_height = h;
+        grid = new Grid();
+        current_piece = new Piece();
+        grid.add_current_piece(current_piece);
+        start();
     }
 
-    public void moveDown() { current_piece.moveDown(); }
+    public void start() {
+        timer = new Timer(true);
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                moveDown();
+                view.requestRender();
+            }
+        }, 0, 500);
+    }
+
+    public int[][] getGrid() { return grid.get_grid(); }
+
+    public void moveDown() {
+        grid.move_down();
+        if(grid.getCurrentPiece() == null) {
+            current_piece = new Piece();
+            grid.add_current_piece(current_piece);
+        }
+    }
     public void moveRight() {
-        current_piece.moveRight();
+        grid.move_right();
     }
     public void moveLeft() {
-        current_piece.moveLeft();
+        grid.move_left();
+    }
+    public void rotateCurrentPiece() { grid.rotate(); }
+
+    public int getScreen_width() {
+        return screen_width;
     }
 
-    public List<Square> getPieces() { return mPieces; }
+    public void setScreen_width(int screen_width) {
+        this.screen_width = screen_width;
+    }
+
+    public int getScreen_height() {
+        return screen_height;
+    }
+
+    public void setScreen_height(int screen_height) {
+        this.screen_height = screen_height;
+    }
 }

@@ -24,7 +24,7 @@ public class MyGLSurfaceView extends GLSurfaceView {
         // Création d'un context OpenGLES 2.0
         setEGLContextClientVersion(2);
 
-        mGame = new Game();
+        mGame = new Game(this);
 
         // Création du renderer qui va être lié au conteneur View créé
         mRenderer = new MyGLRenderer(mGame, this);
@@ -49,6 +49,8 @@ public class MyGLSurfaceView extends GLSurfaceView {
 
             if(y > (2*height/3)) {
                 mGame.moveDown();
+            } else if(y < (height/3)) {
+                mGame.rotateCurrentPiece();
             } else {
                 if(x < width/2) {
                     mGame.moveLeft();

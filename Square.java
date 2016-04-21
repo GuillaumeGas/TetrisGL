@@ -54,8 +54,6 @@ public class Square {
 
     private float posGlX = 0.0f;
     private float posGlY = 0.0f;
-    private int posX = 0;
-    private int posY = 0;
     private float width;
     private float height;
 
@@ -69,11 +67,57 @@ public class Square {
             .2f,  -.2f, 0.0f,
             .2f,   .2f, 0.0f };
     // Le tableau des couleurs
-    static float squareColors[] = {
-            1.0f,  0.0f, 0.0f, 1.0f,
-            1.0f,  1.0f, 1.0f, 1.0f,
-            0.0f,  1.0f, 0.0f, 1.0f,
-            0.0f,  0.0f, 1.0f, 1.0f };
+    static float squareColors[][] = {
+            {
+                    1.0f,  0.0f, 0.0f, 1.0f,
+                    1.0f,  1.0f, 1.0f, 1.0f,
+                    0.0f,  1.0f, 0.0f, 1.0f,
+                    0.0f,  0.0f, 1.0f, 1.0f
+            },
+            {
+                    1.0f,  1.0f, 0.0f, 1.0f,
+                    1.0f,  1.0f, 0.0f, 1.0f,
+                    1.0f,  1.0f, 1.0f, 1.0f,
+                    1.0f,  1.0f, 0.0f, 1.0f
+            },
+            {
+                    1.0f,  1.0f, 1.0f, 1.0f,
+                    0.0f,  1.0f, 1.0f, 1.0f,
+                    0.0f,  1.0f, 1.0f, 1.0f,
+                    0.0f,  1.0f, 1.0f, 1.0f
+            },
+            {
+                    0.0f,  1.0f, 1.0f, 1.0f,
+                    0.0f,  1.0f, 1.0f, 1.0f,
+                    1.0f,  1.0f, 0.0f, 1.0f,
+                    1.0f,  1.0f, 0.0f, 1.0f
+            },
+            {
+                    1.0f,  1.0f, 0.0f, 1.0f,
+                    1.0f,  1.0f, 0.0f, 1.0f,
+                    0.0f,  1.0f, 1.0f, 1.0f,
+                    0.0f,  1.0f, 1.0f, 1.0f
+            },
+            {
+                    0.0f,  1.0f, 0.0f, 1.0f,
+                    0.0f,  1.0f, 1.0f, 1.0f,
+                    1.0f,  1.0f, 0.0f, 1.0f,
+                    0.0f,  1.0f, 1.0f, 1.0f
+            },
+            {
+                    1.0f,  1.0f, 0.0f, 1.0f,
+                    0.0f,  1.0f, 0.0f, 1.0f,
+                    0.0f,  1.0f, 1.0f, 1.0f,
+                    0.0f,  1.0f, 0.0f, 1.0f
+            },
+            {
+                    0.0f,  1.0f, 1.0f, 1.0f,
+                    0.0f,  1.0f, 0.0f, 1.0f,
+                    1.0f,  1.0f, 0.0f, 1.0f,
+                    0.0f,  1.0f, 0.0f, 1.0f
+            }
+
+    };
 
     // Le carré est dessiné avec 2 triangles
     private final short Indices[] = { 0, 1, 2, 0, 2, 3 };
@@ -84,7 +128,7 @@ public class Square {
 
     public Square(int w, int h) {
         float w_ = w / 20;
-        float h_ = h / 44;
+        float h_ = h / 40;
 
         squareCoords[0] = -w_*2/w;
         squareCoords[1] = h_*2/h;
@@ -102,26 +146,6 @@ public class Square {
         posGlY = 1.0f - (height/2.0f);
     }
 
-    public Square(int w, int h, int x, int y) {
-        float w_ = w / 20;
-        float h_ = h / 44;
-
-        squareCoords[0] = -w_*2/w;
-        squareCoords[1] = h_*2/h;
-        squareCoords[3] = -w_*2/w;
-        squareCoords[4] = -h_*2/h;
-        squareCoords[6] = w_*2/w;
-        squareCoords[7] = -h_*2/h;
-        squareCoords[9] = w_*2/w;
-        squareCoords[10] = h_*2/h;
-
-        width = Math.abs(squareCoords[0]) + squareCoords[9];
-        height = squareCoords[1] + Math.abs(squareCoords[4]);
-
-        posGlX = (x+1)*(1.0f - (width/2.0f));
-        posGlY = (y+1)*(1.0f - (height/2.0f));
-    }
-
     public void init() {
         // initialisation du buffer pour les vertex (4 bytes par float)
         ByteBuffer bb = ByteBuffer.allocateDirect(squareCoords.length * 4);
@@ -132,12 +156,9 @@ public class Square {
 
 
         // initialisation du buffer pour les couleurs (4 bytes par float)
-        ByteBuffer bc = ByteBuffer.allocateDirect(squareColors.length * 4);
+        ByteBuffer bc = ByteBuffer.allocateDirect(squareColors[0].length * 4);
         bc.order(ByteOrder.nativeOrder());
         colorBuffer = bc.asFloatBuffer();
-        colorBuffer.put(squareColors);
-        colorBuffer.position(0);
-
 
         // initialisation du buffer des indices
         ByteBuffer dlb = ByteBuffer.allocateDirect(Indices.length * 2);
@@ -161,9 +182,12 @@ public class Square {
     }
 
     /* La fonction Display */
-    public void draw(float[] mvpMatrix) {
+    public void draw(float[] mvpMatrix, int color) {
         // Add program to OpenGL environment
         GLES20.glUseProgram(IdProgram);
+
+        colorBuffer.put(squareColors[color]);
+        colorBuffer.position(0);
 
         // get handle to vertex shader's vPosition member et vCouleur member
         IdPosition = GLES20.glGetAttribLocation(IdProgram, "vPosition");
@@ -204,6 +228,11 @@ public class Square {
         GLES20.glDisableVertexAttribArray(IdPosition);
         GLES20.glDisableVertexAttribArray(IdCouleur);
 
+    }
+
+    public void setPosition(int x, int y) {
+        posGlX = (1.0f - (width/2.0f)) - (x*width);
+        posGlY = (1.0f - (height/2.0f)) - (y*height);
     }
 
     public void moveDown() { posGlY -= height; }

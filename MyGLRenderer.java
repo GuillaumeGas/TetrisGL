@@ -12,15 +12,12 @@ import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
 import android.util.Log;
 
-import java.util.LinkedList;
-import java.util.List;
-
 public class MyGLRenderer implements GLSurfaceView.Renderer {
 
     private static final String TAG = "MyGLRenderer";
     private Game mGame;
     private MyGLSurfaceView mView;
-    private List<Square> mShapes;
+    private Square square;
 
     // Les habituelles matrices Model/View/Projection
     private final float[] mMVPMatrix = new float[16];
@@ -41,11 +38,8 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         GLES20.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
         mGame.init(mView.getWidth(), mView.getHeight());
-        mShapes = mGame.getPieces();
-
-        for(Square s: mShapes) {
-            s.init();
-        }
+        square = new Square(mGame.getScreen_width(), mGame.getScreen_height());
+        square.init();
     }
 
     /* Deuxième méthode équivalente à la fonction Display */
@@ -56,15 +50,23 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         // glClear rien de nouveau on vide le buffer de couleur et de profondeur */
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
 
-        Matrix.setIdentityM(mViewMatrix,0);
+        Matrix.setIdentityM(mViewMatrix, 0);
         Matrix.multiplyMM(mMVPMatrix, 0, mProjectionMatrix, 0, mViewMatrix, 0);
 
-        for(Square s: mShapes) {
-            Matrix.setIdentityM(mModelMatrix,0);
-            Matrix.translateM(mModelMatrix, 0, s.getPosGlX(), s.getPosGlY(), 0);
-            Matrix.multiplyMM(scratch, 0, mMVPMatrix, 0, mModelMatrix, 0);
+        int[][] grid = mGame.getGrid();
+        for(int i = 0; i < 20; i++) {
+            for(int j = 0; j < 10; j++) {
+                if(grid[i][j] != 0) {
+                    square.setPosition(j, i);
 
-            s.draw(scratch);
+                    Matrix.setIdentityM(mModelMatrix,0);
+                    Matrix.translateM(mModelMatrix, 0, square.getPosGlX(), square.getPosGlY(), 0);
+                    Matrix.multiplyMM(scratch, 0, mMVPMatrix, 0, mModelMatrix, 0);
+
+                    int color = (grid[i][j] < 0 ? 0 : grid[i][j]);
+                    square.draw(scratch, color);
+                }
+            }
         }
     }
 
