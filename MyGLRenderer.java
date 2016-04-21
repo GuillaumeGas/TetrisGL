@@ -12,6 +12,11 @@ import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
 import android.util.Log;
 
+/**
+ *  Permet l'affichage des pieces.
+ *  On y retrouve un pointeur sur le jeu afin de récupérer la grille.
+ *  Pour chaque case de la grille, si elle est différente de 0, c'est donc une partie d'une piece et on affiche un carré
+ */
 public class MyGLRenderer implements GLSurfaceView.Renderer {
 
     private static final String TAG = "MyGLRenderer";
@@ -37,6 +42,11 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         // la couleur du fond d'écran
         GLES20.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
+        /*
+          On initialise le jeu ici afin d'avoir la taille de l'écran
+          On créé un carré qui sera affiché plusieurs fois suivant le contenu de la grille (en modifiant la matrice de translation et la couleur à chaque fois)
+        */
+
         mGame.init(mView.getWidth(), mView.getHeight());
         square = new Square(mGame.getScreen_width(), mGame.getScreen_height());
         square.init();
@@ -53,10 +63,12 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         Matrix.setIdentityM(mViewMatrix, 0);
         Matrix.multiplyMM(mMVPMatrix, 0, mProjectionMatrix, 0, mViewMatrix, 0);
 
+        //Pour chaque case de la grille...
         int[][] grid = mGame.getGrid();
         for(int i = 0; i < 20; i++) {
             for(int j = 0; j < 10; j++) {
                 if(grid[i][j] != 0) {
+                    //si c'est bien un bout de piece, on modifie la position du carré (qui calcul la vraie position opengl)
                     square.setPosition(j, i);
 
                     Matrix.setIdentityM(mModelMatrix,0);
@@ -64,7 +76,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
                     Matrix.multiplyMM(scratch, 0, mMVPMatrix, 0, mModelMatrix, 0);
 
                     int color = (grid[i][j] < 0 ? 0 : grid[i][j]);
-                    square.draw(scratch, color);
+                    square.draw(scratch, color); //on indique au carré quelle couleur utiliser
                 }
             }
         }

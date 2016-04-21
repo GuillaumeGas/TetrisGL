@@ -1,10 +1,19 @@
 package fr.univ_orleans.info.tetrisgl;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Created by Guillaume on 20/04/2016.
+ *
+ * Classe représentant la grille.
+ * Celle-ci est un tableau 2D d'entiers :
+ *   - case vide = 0,
+ *   - case négative = piece bloquée en bas,
+ *   - case positive = une partie d'une piece
+ *
+ * Les méthodes de "flood" fonctionnent de la manière suivante :
+ *   On part d'une case de la grille : case de départ où dessiner la piece
+ *   On part d'une case de la grille de la piece (voir Piece.java)
+ *     Pour une case donnée de la piece, si elle est différente de 0, on l'affiche dans la grille principale.
+ *     Puis on rappel la méthode de flood sur les cases du dessus, dessous, droite, gauche
  */
 public class Grid {
     private final int width = 10;
@@ -39,6 +48,9 @@ public class Grid {
         init();
     }
 
+    /**
+       Si on peut afficher la piece aux coordonnées prévues, alors on la dessine dans la grille, sinon game over
+     */
     public void add_current_piece(Piece p) {
         current_piece = p;
         int[] coord_start_flood = current_piece.get_start_flood_coord();
@@ -61,6 +73,9 @@ public class Grid {
         }
     }
 
+    /**
+     *  On va chercher la piece courante et la bloquer en multipliant ses valeurs par -1
+     */
     public void block_current_piece() {
         boolean[][] visited = new boolean[SIZE_PIECE][SIZE_PIECE];
         for(int i = 0; i < SIZE_PIECE; i++) {
@@ -69,6 +84,7 @@ public class Grid {
             }
         }
 
+        //Sur la grille de la piece, cela correspond aux coord x et y de la première case comportant une valeur != 0
         int[] coord_start_flood = current_piece.get_start_flood_coord();
         block_current_piece_using_flood(current_piece.getPosX(), current_piece.getPosY(), coord_start_flood[0], coord_start_flood[1], current_piece.getVal(), visited);
 
@@ -76,19 +92,23 @@ public class Grid {
     }
 
     public void block_current_piece_using_flood(int grid_x, int grid_y, int piece_x, int piece_y, int val, boolean visited[][]) {
+        //si on sort de la grille principale, on ne fait rien
         if(grid_x < 0 || grid_x >= width || grid_y < 0 || grid_y >= height || grid[grid_y][grid_x] != val) {
             return;
         }
 
+        //si on sort de la grille de la piece, ou si la valeur à cette case est 0, on ne fait rien
         int[][] piece_grid = current_piece.get_grid();
         if(piece_x < 0 || piece_x >= SIZE_PIECE || piece_y < 0 || piece_y >= SIZE_PIECE || piece_grid[piece_y][piece_x] == 0 || visited[piece_y][piece_x]) {
             return;
         }
 
+        //sinon, on est bien sur une valeur de la piece qu'on multiplie par -1 dans la grille principale
         grid[grid_y][grid_x] *= -1;
         tmp_grid[grid_y][grid_x] = grid[grid_y][grid_x];
         visited[piece_y][piece_x] = true;
 
+        //on continue de visiter la grille de la piece
         block_current_piece_using_flood(grid_x+1, grid_y, piece_x+1, piece_y, val, visited);
         block_current_piece_using_flood(grid_x-1, grid_y, piece_x-1, piece_y, val, visited);
         block_current_piece_using_flood(grid_x, grid_y+1, piece_x, piece_y+1, val, visited);
@@ -203,7 +223,6 @@ public class Grid {
         
     */
     public boolean is_movable(int grid_x, int grid_y, int piece_x, int piece_y, int val) {
-        //boolean res = true;
         boolean[][] visited = new boolean[SIZE_PIECE][SIZE_PIECE];
         for(int x = 0; x < SIZE_PIECE; x++) {
             for(int y = 0; y < SIZE_PIECE; y++) {
@@ -211,7 +230,6 @@ public class Grid {
             }
         }
         return is_movable_using_flood(grid_x, grid_y, piece_x, piece_y, val, visited);
-        //return res;
     }
 
     public boolean is_movable_using_flood(int grid_x, int grid_y, int piece_x, int piece_y, int val, boolean visited[][]) {

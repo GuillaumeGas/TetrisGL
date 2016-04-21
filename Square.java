@@ -11,6 +11,14 @@ import java.nio.ShortBuffer;
 
 import android.opengl.GLES20;
 
+/**
+ *  Modifications effectuées :
+ *   - calcul des coordonnées en fonction de la taille de l'écran, du nombre de colonnes et de ligne
+ *   - calcul de la position (pour la translation) en fonction de la position dans la grille
+ *   - tableau de tableaux de couleur
+ *   - le tableau de couleur est envoyé dans la fonction draw en fonction de la couleur passée en paramètre
+ */
+
 //Dessiner un carré
 
 public class Square {
@@ -66,7 +74,7 @@ public class Square {
             -.2f,  -.2f, 0.0f,
             .2f,  -.2f, 0.0f,
             .2f,   .2f, 0.0f };
-    // Le tableau des couleurs
+    // Les tableaus des couleurs
     static float squareColors[][] = {
             {
                     1.0f,  0.0f, 0.0f, 1.0f,

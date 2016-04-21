@@ -6,12 +6,10 @@ package fr.univ_orleans.info.tetrisgl;
 
 import android.content.Context;
 import android.opengl.GLSurfaceView;
-import android.util.Log;
-import android.view.Display;
 import android.view.MotionEvent;
 import android.widget.Toast;
 
-/*
+/**
     Class MyGLSurfaceView : gère les évènements, créé le renderer
 */
 public class MyGLSurfaceView extends GLSurfaceView {
@@ -19,6 +17,10 @@ public class MyGLSurfaceView extends GLSurfaceView {
     private final MyGLRenderer mRenderer;
     private Game mGame;
     private Context context;
+
+    private float lastX = 0.0f;
+    private float lastY = 0.0f;
+    private boolean moved = false;
 
     public MyGLSurfaceView(Context context) {
         super(context);
@@ -38,31 +40,56 @@ public class MyGLSurfaceView extends GLSurfaceView {
     }
 
     /* Comment interpréter les événements sur l'écran tactile */
-
+    /* Toucher l'ecran simplement : effectuer une rotation
+     * Toucher vers le bas : faire tomber la piece
+     * Toucher vers la droite ou la gauche : faire bouger la piece vers la droite gauche*/
     @Override
     public boolean onTouchEvent(MotionEvent e) {
-        if(e.getActionMasked() == MotionEvent.ACTION_UP) {
-            // Les coordonnées du point touché sur l'écran
+        if(e.getActionMasked() == MotionEvent.ACTION_DOWN) {
             float x = e.getX();
             float y = e.getY();
 
-            // la taille de l'écran en pixels
-            float width = getWidth();
-            float height = getHeight();
+            lastX = x;
+            lastY = y;
+        } else if(e.getActionMasked() == MotionEvent.ACTION_MOVE) {
+            float x = e.getX();
+            float y = e.getY();
 
-            if(y > (2*height/3)) {
-                mGame.moveDown();
-            } else if(y < (height/3)) {
-                mGame.rotateCurrentPiece();
-            } else {
-                if(x < width/2) {
-                    mGame.moveLeft();
-                } else {
-                    mGame.moveRight();
+            float deltaX = Math.abs(x - lastX);
+            float deltaY = Math.abs(y - lastY);
+
+            if(!moved) {
+                if (deltaX > 50) {
+                    if (x < lastX) {
+                        mGame.moveLeft();
+                    } else {
+                        mGame.moveRight();
+                    }
+                    moved = true;
+                }
+                if (deltaY > 50) {
+                    if (y > lastY) {
+                        mGame.moveDownDown();
+                    }
+                    moved = true;
                 }
             }
-            requestRender();
+        } else if(e.getActionMasked() == MotionEvent.ACTION_UP) {
+            if(!moved) {
+                float x = e.getX();
+                float y = e.getY();
+
+                // la taille de l'écran en pixels
+                float width = getWidth();
+                float height = getHeight();
+
+                mGame.rotateCurrentPiece();
+            } else {
+                moved = false;
+            }
         }
+
+
 
         return true;
     }
@@ -71,6 +98,7 @@ public class MyGLSurfaceView extends GLSurfaceView {
         int duration = Toast.LENGTH_SHORT;
         String text_score = "Votre score est de " + Integer.toString(score) + " ! ";
 
+        //marche pas, le context ne semble pas bon
         //Toast toast = Toast.makeText(context, text_score, duration);
         //toast.show();
         System.out.println(text_score);
