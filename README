@@ -1,0 +1,17 @@
+## TetrisGL ##
+
+Le jeu marche de la manière suivant :
+ - Touchez l'écran pour effectuer une rotation sur la piece
+ - Touchez l'écran vers la droite ou la gauche pour faire bouger la piece
+ - Toucher l'écran vers le bas pour la faire tomber
+
+Si aucune piece ne peut apparaitre, le jeu redémarre.
+Si une ligne est pleine, elle disparait et ajoute un point au joueur (les points ne sont pas affichés)
+
+# Détails technique #
+
+Chaque classe comporte des commentaires sur son fonctionnement.
+
+Le jeu est basé sur une grille 10x20 cases.
+Le fonctionnement du jeu est entièrement géré sur cette grille et sur celle de la piece courante.
+A l'affichage, chaque case de la grille est inspectée, si elle n'est pas vide, un carré de la couleur désirée est dessiné à l'écran.
