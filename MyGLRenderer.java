@@ -67,16 +67,17 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         int[][] grid = mGame.getGrid();
         for(int i = 0; i < 20; i++) {
             for(int j = 0; j < 10; j++) {
+                square.setPosition(j, i);
+
+                Matrix.setIdentityM(mModelMatrix,0);
+                Matrix.translateM(mModelMatrix, 0, square.getPosGlX(), square.getPosGlY(), 0);
+                Matrix.multiplyMM(scratch, 0, mMVPMatrix, 0, mModelMatrix, 0);
+
                 if(grid[i][j] != 0) {
-                    //si c'est bien un bout de piece, on modifie la position du carré (qui calcul la vraie position opengl)
-                    square.setPosition(j, i);
-
-                    Matrix.setIdentityM(mModelMatrix,0);
-                    Matrix.translateM(mModelMatrix, 0, square.getPosGlX(), square.getPosGlY(), 0);
-                    Matrix.multiplyMM(scratch, 0, mMVPMatrix, 0, mModelMatrix, 0);
-
                     int color = (grid[i][j] < 0 ? 0 : grid[i][j]);
                     square.draw(scratch, color); //on indique au carré quelle couleur utiliser
+                } else {
+                    square.draw(scratch, 8);
                 }
             }
         }
