@@ -1,4 +1,4 @@
-package fr.univ_orleans.info.tetrisgl;
+package fr.univ_orleans.info.tetrisgl.models;
 
 /**
  * Created by Guillaume on 19/04/2016.
@@ -10,6 +10,8 @@ import java.nio.FloatBuffer;
 import java.nio.ShortBuffer;
 
 import android.opengl.GLES20;
+
+import fr.univ_orleans.info.tetrisgl.views.GameRenderer;
 
 /**
  *  Modifications effectuées :
@@ -189,10 +191,10 @@ public class Square {
         indiceBuffer.position(0);
 
         /* Chargement des shaders */
-        int vertexShader = MyGLRenderer.loadShader(
+        int vertexShader = GameRenderer.loadShader(
                 GLES20.GL_VERTEX_SHADER,
                 vertexShaderCode);
-        int fragmentShader = MyGLRenderer.loadShader(
+        int fragmentShader = GameRenderer.loadShader(
                 GLES20.GL_FRAGMENT_SHADER,
                 fragmentShaderCode);
 
@@ -232,11 +234,11 @@ public class Square {
 
         // get handle to shape's transformation matrix
         IdMVPMatrix = GLES20.glGetUniformLocation(IdProgram, "uMVPMatrix");
-        MyGLRenderer.checkGlError("glGetUniformLocation");
+        GameRenderer.checkGlError("glGetUniformLocation");
 
         // Apply the projection and view transformation
         GLES20.glUniformMatrix4fv(IdMVPMatrix, 1, false, mvpMatrix, 0);
-        MyGLRenderer.checkGlError("glUniformMatrix4fv");
+        GameRenderer.checkGlError("glUniformMatrix4fv");
 
 
         // Draw the square

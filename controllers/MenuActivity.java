@@ -1,13 +1,14 @@
-package fr.univ_orleans.info.tetrisgl;
+package fr.univ_orleans.info.tetrisgl.controllers;
 import android.app.Activity;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;
 
-public class MainActivity extends Activity {
+import fr.univ_orleans.info.tetrisgl.views.MenuSurfaceView;
 
-    // le conteneur View pour faire du rendu OpenGL
+public class MenuActivity extends Activity {
+
     private GLSurfaceView mGLView;
 
     @Override
@@ -20,8 +21,7 @@ public class MainActivity extends Activity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-
-        mGLView = new MyGLSurfaceView(this);
+        mGLView = new MenuSurfaceView(this);
         setContentView(mGLView);
     }
 }

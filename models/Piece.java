@@ -1,4 +1,4 @@
-package fr.univ_orleans.info.tetrisgl;
+package fr.univ_orleans.info.tetrisgl.models;
 
 import java.util.Random;
 

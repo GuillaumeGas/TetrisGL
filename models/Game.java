@@ -1,7 +1,9 @@
-package fr.univ_orleans.info.tetrisgl;
+package fr.univ_orleans.info.tetrisgl.models;
 
 import java.util.Timer;
 import java.util.TimerTask;
+
+import fr.univ_orleans.info.tetrisgl.views.GameSurfaceView;
 
 /**
  * Created by Guillaume on 19/04/2016.
@@ -18,9 +20,9 @@ public class Game {
     private int screen_width;
     private int screen_height;
     private Timer timer;
-    private MyGLSurfaceView view;
+    private GameSurfaceView view;
 
-    public Game(MyGLSurfaceView v) {
+    public Game(GameSurfaceView v) {
         view = v;
     }
 

@@ -1,4 +1,4 @@
-package fr.univ_orleans.info.tetrisgl;
+package fr.univ_orleans.info.tetrisgl.views;
 
 /**
  * Created by Guillaume on 19/04/2016.
@@ -12,16 +12,20 @@ import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
 import android.util.Log;
 
+import fr.univ_orleans.info.tetrisgl.models.Game;
+import fr.univ_orleans.info.tetrisgl.models.Piece;
+import fr.univ_orleans.info.tetrisgl.models.Square;
+
 /**
  *  Permet l'affichage des pieces.
  *  On y retrouve un pointeur sur le jeu afin de récupérer la grille.
  *  Pour chaque case de la grille, si elle est différente de 0, c'est donc une partie d'une piece et on affiche un carré
  */
-public class MyGLRenderer implements GLSurfaceView.Renderer {
+public class GameRenderer implements GLSurfaceView.Renderer {
 
-    private static final String TAG = "MyGLRenderer";
+    private static final String TAG = "GameRenderer";
     private Game mGame;
-    private MyGLSurfaceView mView;
+    private GameSurfaceView mView;
     private Square square;
 
     // Les habituelles matrices Model/View/Projection
@@ -30,7 +34,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     private final float[] mViewMatrix = new float[16];
     private final float[] mModelMatrix = new float[16];
 
-    public MyGLRenderer(Game g, MyGLSurfaceView v) {
+    public GameRenderer(Game g, GameSurfaceView v) {
         mGame = g;
         mView = v;
     }

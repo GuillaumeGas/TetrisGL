@@ -1,4 +1,4 @@
-package fr.univ_orleans.info.tetrisgl;
+package fr.univ_orleans.info.tetrisgl.views;
 
 /**
  * Created by Guillaume on 19/04/2016.
@@ -9,12 +9,14 @@ import android.opengl.GLSurfaceView;
 import android.view.MotionEvent;
 import android.widget.Toast;
 
+import fr.univ_orleans.info.tetrisgl.models.Game;
+
 /**
     Class MyGLSurfaceView : gère les évènements, créé le renderer
 */
-public class MyGLSurfaceView extends GLSurfaceView {
+public class GameSurfaceView extends GLSurfaceView {
 
-    private final MyGLRenderer mRenderer;
+    private final GameRenderer mRenderer;
     private Game mGame;
     private Context context;
 
@@ -22,7 +24,7 @@ public class MyGLSurfaceView extends GLSurfaceView {
     private float lastY = 0.0f;
     private boolean moved = false;
 
-    public MyGLSurfaceView(Context context) {
+    public GameSurfaceView(Context context) {
         super(context);
 
         this.context = context;
@@ -32,7 +34,7 @@ public class MyGLSurfaceView extends GLSurfaceView {
         mGame = new Game(this);
 
         // Création du renderer qui va être lié au conteneur View créé
-        mRenderer = new MyGLRenderer(mGame, this);
+        mRenderer = new GameRenderer(mGame, this);
         setRenderer(mRenderer);
 
         // Option pour indiquer qu'on redessine uniquement si les données changent

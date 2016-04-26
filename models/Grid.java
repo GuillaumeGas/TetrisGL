@@ -1,4 +1,4 @@
-package fr.univ_orleans.info.tetrisgl;
+package fr.univ_orleans.info.tetrisgl.models;
 
 /**
  * Created by Guillaume on 20/04/2016.
