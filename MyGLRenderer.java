@@ -48,7 +48,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         */
 
         mGame.init(mView.getWidth(), mView.getHeight());
-        square = new Square(mGame.getScreen_width(), mGame.getScreen_height());
+        square = new Square(mGame.getScreen_width(), mGame.getScreen_height(), false);
         square.init();
     }
 
@@ -64,7 +64,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         Matrix.multiplyMM(mMVPMatrix, 0, mProjectionMatrix, 0, mViewMatrix, 0);
 
         //Pour chaque case de la grille...
-        int[][] grid = mGame.getGrid();
+        int[][] grid = mGame.getGrid().get_grid();
         for(int i = 0; i < 20; i++) {
             for(int j = 0; j < 10; j++) {
                 square.setPosition(j, i);
@@ -77,10 +77,34 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
                     int color = (grid[i][j] < 0 ? 0 : grid[i][j]);
                     square.draw(scratch, color); //on indique au carré quelle couleur utiliser
                 } else {
-                    square.draw(scratch, 8);
+                    square.draw(scratch, 9);
                 }
             }
         }
+
+        /* On affiche la prochaine piece */
+        Piece piece = mGame.getNextPiece();
+        int[][] piece_grid = piece.get_grid();
+
+        boolean check = false;
+        for(int i = 0; i < piece.SIZE_PIECE; i++) { if( piece_grid[i][0] != 0) check = true; }
+        int y = 1;
+        for(int i = 0; i < piece.SIZE_PIECE; i++) {
+            int x = mGame.getGrid().getWidth() + (check ? 0 : 1);
+            for(int j = 0; j < piece.SIZE_PIECE; j++) {
+                if (piece_grid[i][j] != 0) {
+                    square.setPosition(x++, y);
+
+                    Matrix.setIdentityM(mModelMatrix, 0);
+                    Matrix.translateM(mModelMatrix, 0, square.getPosGlX(), square.getPosGlY(), 0);
+                    Matrix.multiplyMM(scratch, 0, mMVPMatrix, 0, mModelMatrix, 0);
+
+                    square.draw(scratch, piece_grid[i][j]);
+                }
+            }
+            y++;
+        }
+
     }
 
     /* équivalent au Reshape en OpenGLSL */

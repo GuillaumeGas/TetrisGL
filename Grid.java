@@ -31,6 +31,20 @@ public class Grid {
         tmp_grid = new int[height][width];
     }
 
+    public Grid(Grid g) {
+        grid = new int[height][width];
+        tmp_grid = new int[height][width];
+
+        for(int i = 0; i < height; i++) {
+            for(int j = 0; j < width; j++) {
+                grid[i][j] = g.grid[i][j];
+                tmp_grid[i][j] = g.tmp_grid[i][j];
+            }
+        }
+
+        current_piece = new Piece(g.getCurrentPiece());
+    }
+
     public void init() {
         game_over = false;
         score = 0;
@@ -66,7 +80,7 @@ public class Grid {
                     current_piece.getPosY(),
                     coord_start_flood[0],
                     coord_start_flood[1],
-                    current_piece.getVal());
+                    current_piece.getVal(), true);
         } else {
             game_over = true;
             current_piece = null;
@@ -115,7 +129,7 @@ public class Grid {
         block_current_piece_using_flood(grid_x, grid_y-1, piece_x, piece_y-1, val, visited);
     }
 
-    public boolean move_down() {
+    public boolean move_down(boolean ghost) {
         if(current_piece != null) {
             int[] coord_start_flood = current_piece.get_start_flood_coord();
 
@@ -137,7 +151,7 @@ public class Grid {
                         current_piece.getPosY(),
                         coord_start_flood[0],
                         coord_start_flood[1],
-                        current_piece.getVal());
+                        current_piece.getVal(), ghost);
 
 
 
@@ -173,7 +187,7 @@ public class Grid {
                         current_piece.getPosY(),
                         coord_start_flood[0],
                         coord_start_flood[1],
-                        current_piece.getVal());
+                        current_piece.getVal(), true);
 
 
 
@@ -207,7 +221,7 @@ public class Grid {
                         current_piece.getPosY(),
                         coord_start_flood[0],
                         coord_start_flood[1],
-                        current_piece.getVal());
+                        current_piece.getVal(), true);
 
 
 
@@ -243,7 +257,6 @@ public class Grid {
         if( grid_x < 0 || grid_x >= width ||
                 grid_y < 0 || grid_y >= height ||
                 tmp_grid[grid_y][grid_x] != 0) {
-            //res = false;
             return false;
         }
 
@@ -255,15 +268,17 @@ public class Grid {
         is_movable_using_flood(grid_x, grid_y - 1, piece_x, piece_y - 1, val, visited);
     }
 
-    public void draw_piece(int grid_x, int grid_y, int piece_x, int piece_y, int val) {
+    public void draw_piece(int grid_x, int grid_y, int piece_x, int piece_y, int val, boolean ghost) {
         boolean[][] visited = new boolean[SIZE_PIECE][SIZE_PIECE];
         for(int x = 0; x < SIZE_PIECE; x++) {
             for(int y = 0; y < SIZE_PIECE; y++) {
                 visited[y][x] = false;
             }
         }
+        if(ghost) {
+            draw_ghost();
+        }
         draw_piece_using_flood(grid_x, grid_y, piece_x, piece_y, val, visited);
-        show();
     }
 
     public void draw_piece_using_flood(int grid_x, int grid_y, int piece_x, int piece_y, int val, boolean visited[][]) {
@@ -325,7 +340,7 @@ public class Grid {
             current_piece.rotate_left();
         }
 
-        draw_piece(current_piece.getPosX(), current_piece.getPosY(), current_piece.get_start_flood_coord()[0], current_piece.get_start_flood_coord()[1], current_piece.getVal());
+        draw_piece(current_piece.getPosX(), current_piece.getPosY(), current_piece.get_start_flood_coord()[0], current_piece.get_start_flood_coord()[1], current_piece.getVal(), true);
     }
 
     public boolean is_game_over()  {
@@ -379,14 +394,6 @@ public class Grid {
         return grid;
     }
 
-    public void test() {
-        for(int x = 0; x < width; x++) {
-            grid[15][x] = -1;
-            tmp_grid[15][x] = -1;
-        }
-    }
-
-
     public Piece getCurrentPiece(){
         return current_piece;
     }
@@ -396,9 +403,88 @@ public class Grid {
     }
 
 
-    public int getHeightt() {
+    public int getHeight() {
         return height;
     }
 
     public int getScore() { return score; }
+
+
+    /* PARTIE GHOST */
+    private void draw_ghost_using_flood(int grid_x, int grid_y, int piece_x, int piece_y,int val, boolean visited[][]){
+        int[][] matrix_piece = current_piece.get_grid();
+        if( piece_x < 0 || piece_x >= SIZE_PIECE ||
+                piece_y < 0 || piece_y >= SIZE_PIECE ||
+                matrix_piece[piece_y][piece_x] != val ||
+                visited[piece_y][piece_x]) {
+            return;
+        }
+
+        grid[grid_y][grid_x] = 8;
+        visited[piece_y][piece_x] = true;
+
+        draw_ghost_using_flood(grid_x + 1, grid_y, piece_x + 1, piece_y,val, visited);
+        draw_ghost_using_flood(grid_x - 1, grid_y, piece_x - 1, piece_y,val, visited);
+        draw_ghost_using_flood(grid_x, grid_y + 1, piece_x, piece_y + 1,val, visited);
+        draw_ghost_using_flood(grid_x, grid_y - 1, piece_x, piece_y - 1,val, visited);
+    }
+
+    private void draw_ghost(){
+        clear_ghost();
+        boolean[][] visited = new boolean[SIZE_PIECE][SIZE_PIECE];
+        for(int x = 0; x < SIZE_PIECE; x++) {
+            for(int y = 0; y < SIZE_PIECE; y++) {
+                visited[y][x] = false;
+            }
+        }
+
+        int ghost_x = current_piece.getPosX();
+        int ghost_y = current_piece.getPosY();
+
+        Grid tmp = new Grid(this);
+
+        while(tmp.move_down(false)){
+            ghost_y++;
+        }
+
+
+        int[] coord_start_flood = current_piece.get_start_flood_coord();
+
+        draw_ghost_using_flood(ghost_x, ghost_y, coord_start_flood[0], coord_start_flood[1],current_piece.getVal(), visited);
+    }
+
+
+
+
+    private void clear_ghost_using_flood(int grid_x, int grid_y, int piece_x, int piece_y,int val, boolean visited[][]){
+        int[][] matrix_piece = current_piece.get_grid();
+        if( piece_x < 0 || piece_x >= SIZE_PIECE ||
+                piece_y < 0 || piece_y >= SIZE_PIECE ||
+                matrix_piece[piece_y][piece_x] != val ||
+                visited[piece_y][piece_x]) {
+            return;
+        }
+
+        grid[grid_y][grid_x] = 0;
+        visited[piece_y][piece_x] = true;
+
+        clear_ghost_using_flood(grid_x + 1, grid_y, piece_x + 1, piece_y,val, visited);
+        clear_ghost_using_flood(grid_x - 1, grid_y, piece_x - 1, piece_y,val, visited);
+        clear_ghost_using_flood(grid_x, grid_y + 1, piece_x, piece_y + 1,val, visited);
+        clear_ghost_using_flood(grid_x, grid_y - 1, piece_x, piece_y - 1,val, visited);
+    }
+
+
+    private void clear_ghost(){
+	    for(int i = 0; i < height; i++) {
+            for(int j = 0; j < width; j++) {
+                if(grid[i][j] == 8) {
+                    grid[i][j] = 0;
+                }
+            }
+        }
+
+    }
 }
+
+

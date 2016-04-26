@@ -14,6 +14,7 @@ public class Game {
 
     private Grid grid;
     private Piece current_piece;
+    private Piece next_piece;
     private int screen_width;
     private int screen_height;
     private Timer timer;
@@ -28,7 +29,12 @@ public class Game {
         screen_height = h;
         grid = new Grid();
         current_piece = new Piece();
+        next_piece = new Piece();
         grid.add_current_piece(current_piece);
+
+        System.out.println("[START]\nCP = " + Integer.toString(current_piece.getVal()));
+        System.out.println("NP = " + Integer.toString(next_piece.getVal()));
+
         start();
     }
 
@@ -44,7 +50,7 @@ public class Game {
         }, 0, 500);
     }
 
-    public int[][] getGrid() { return grid.get_grid(); }
+    public Grid getGrid() { return grid; }
 
     /*
        Fait tomber la piece d'une case, si la piece courante est nulle dans la grille,
@@ -52,29 +58,42 @@ public class Game {
        En cas de game over, on ré initialise tout
     */
     public void moveDown() {
-        grid.move_down();
+        grid.move_down(true);
         if(grid.is_game_over()) {
             //view.showScore(grid.getScore());
             grid.clear();
             grid.init();
         } else if(grid.getCurrentPiece() == null) {
-            current_piece = new Piece();
-            grid.add_current_piece(current_piece);
+            grid.add_current_piece(next_piece);
+            current_piece = next_piece;
+
+            System.out.println("CP = " + Integer.toString(current_piece.getVal()));
+            //current_piece.show();
+
+            next_piece = new Piece();
+
+            System.out.println("NP = " + Integer.toString(next_piece.getVal()));
+            //next_piece.show();
         }
     }
 
     /* Meme chose mais on fait tomber la piece tout en bas */
     public void moveDownDown() {
-        while(grid.getCurrentPiece() != null) {
-            grid.move_down();
-        }
+        while(grid.move_down(false)) {}
         if(grid.is_game_over()) {
             //view.showScore(grid.getScore());
             grid.clear();
             grid.init();
         } else {
-            current_piece = new Piece();
-            grid.add_current_piece(current_piece);
+            grid.add_current_piece(next_piece);
+            current_piece = next_piece;
+            System.out.println("CP = " + Integer.toString(current_piece.getVal()));
+            //current_piece.show();
+
+            next_piece = new Piece();
+
+            System.out.println("NP = " + Integer.toString(next_piece.getVal()));
+            //next_piece.show();
         }
     }
 
@@ -85,7 +104,8 @@ public class Game {
     public void moveLeft() {
         grid.move_left();
     }
-    public void rotateCurrentPiece() { grid.rotate(); }
+    public void rotateCurrentPiece() { grid.rotate();
+    }
 
     public int getScreen_width() {
         return screen_width;
@@ -101,5 +121,11 @@ public class Game {
 
     public void setScreen_height(int screen_height) {
         this.screen_height = screen_height;
+    }
+
+    public Piece getNextPiece() { return next_piece; }
+
+    public Piece getCurrentPiece() {
+        return current_piece;
     }
 }

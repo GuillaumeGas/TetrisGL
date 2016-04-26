@@ -125,6 +125,12 @@ public class Square {
                     0.0f,  1.0f, 0.0f, 1.0f
             },
             {
+                    0.8f,  0.8f, 0.8f, 1.0f,
+                    0.8f,  0.8f, 0.8f, 1.0f,
+                    0.8f,  0.8f, 0.8f, 1.0f,
+                    0.8f,  0.8f, 0.8f, 1.0f
+            },
+            {
                     0.5f,  0.5f, 0.5f, 1.0f,
                     0.5f,  0.5f, 0.5f, 1.0f,
                     0.5f,  0.5f, 0.5f, 1.0f,
@@ -140,7 +146,7 @@ public class Square {
 
     private final int couleurStride = COULEURS_PER_VERTEX * 4; // le pas entre 2 couleurs
 
-    public Square(int w, int h) {
+    public Square(int w, int h, boolean to_be_at_right) {
         float offset = 0.01f * w / 2;
         float w_ = (w-(w/3)) / 20;
         float h_ = (h-(40*offset)) / 40;
@@ -249,10 +255,6 @@ public class Square {
         posGlX = (1.0f - (width/2.0f)) - (x*width) - (x == 0 ? 0 : (0.01f*x));
         posGlY = (1.0f - (height/2.0f)) - (y*height) - (y == 0 ? 0 : (0.01f*y));
     }
-
-    public void moveDown() { posGlY -= height; }
-    public void moveRight() { posGlX -= width; }
-    public void moveLeft() { posGlX += width; }
 
     public float getPosGlX() { return posGlX; }
     public float getPosGlY() { return posGlY; }

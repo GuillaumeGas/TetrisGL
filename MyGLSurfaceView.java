@@ -76,13 +76,6 @@ public class MyGLSurfaceView extends GLSurfaceView {
             }
         } else if(e.getActionMasked() == MotionEvent.ACTION_UP) {
             if(!moved) {
-                float x = e.getX();
-                float y = e.getY();
-
-                // la taille de l'écran en pixels
-                float width = getWidth();
-                float height = getHeight();
-
                 mGame.rotateCurrentPiece();
             } else {
                 moved = false;

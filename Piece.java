@@ -5,7 +5,7 @@ import java.util.Random;
 /**
  * Created by Guillaume on 20/04/2016.
  *
- * Une piece symboliser par les valeurs positives dans une grille 4*4
+ * Une piece symbolisée par les valeurs positives dans une grille 4*4
  */
 public class Piece {
 
@@ -26,6 +26,21 @@ public class Piece {
         generate();
         posX = 4;
         posY = 0;
+    }
+
+    public Piece(Piece p) {
+        val = p.val;
+        posX = p.posX;
+        posY = p.posY;
+        grid = new int[4][4];
+        for(int i = 0; i < SIZE_PIECE; i++) {
+            for(int j = 0; j < SIZE_PIECE; j++) {
+                grid[i][j] = p.grid[i][j];
+            }
+        }
+        start_flood_coord = new int[2];
+        start_flood_coord[0] = p.start_flood_coord[0];
+        start_flood_coord[1] = p.start_flood_coord[1];
     }
 
     /* Genere une piece aleatoire a partie du tableau de formes (voir plus bas), on effectue également un nombre aléatoire de rotation */
