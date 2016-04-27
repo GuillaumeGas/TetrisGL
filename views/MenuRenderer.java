@@ -12,6 +12,9 @@ import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
 import android.util.Log;
 
+import java.util.LinkedList;
+
+import fr.univ_orleans.info.tetrisgl.models.Coord;
 import fr.univ_orleans.info.tetrisgl.models.Menu;
 import fr.univ_orleans.info.tetrisgl.models.Square;
 
@@ -62,11 +65,14 @@ public class MenuRenderer implements GLSurfaceView.Renderer {
         Matrix.setIdentityM(mViewMatrix, 0);
         Matrix.multiplyMM(mMVPMatrix, 0, mProjectionMatrix, 0, mViewMatrix, 0);
 
-        square.setPosition(mMenu.getCoords()[0], mMenu.getCoords()[1]);
-        Matrix.setIdentityM(mModelMatrix,0);
-        Matrix.translateM(mModelMatrix, 0, square.getPosGlX(), square.getPosGlY(), 0);
-        Matrix.multiplyMM(scratch, 0, mMVPMatrix, 0, mModelMatrix, 0);
-        square.draw(scratch, 0);
+        LinkedList<Coord> coords = (LinkedList<Coord>)mMenu.getCoords();
+        for(Coord c : coords) {
+            square.setPosition(c.x, c.y);
+            Matrix.setIdentityM(mModelMatrix,0);
+            Matrix.translateM(mModelMatrix, 0, square.getPosGlX(), square.getPosGlY(), 0);
+            Matrix.multiplyMM(scratch, 0, mMVPMatrix, 0, mModelMatrix, 0);
+            square.draw(scratch, 0);
+        }
     }
 
     /* équivalent au Reshape en OpenGLSL */

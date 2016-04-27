@@ -253,7 +253,7 @@ public class Square {
 
     }
 
-    public void setPosition(int x, int y) {
+    public void setPosition(float x, float y) {
         posGlX = (1.0f - (width/2.0f)) - (x*width) - (x == 0 ? 0 : (0.01f*x));
         posGlY = (1.0f - (height/2.0f)) - (y*height) - (y == 0 ? 0 : (0.01f*y));
     }
