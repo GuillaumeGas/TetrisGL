@@ -17,6 +17,7 @@ import java.util.LinkedList;
 import fr.univ_orleans.info.tetrisgl.models.Coord;
 import fr.univ_orleans.info.tetrisgl.models.Menu;
 import fr.univ_orleans.info.tetrisgl.models.Square;
+import fr.univ_orleans.info.tetrisgl.models.SquareMenu;
 
 /**
  *  Permet l'affichage des pieces.
@@ -29,6 +30,7 @@ public class MenuRenderer implements GLSurfaceView.Renderer {
     private Menu mMenu;
     private MenuSurfaceView mView;
     private Square square;
+    private SquareMenu squareMenu;
 
     // Les habituelles matrices Model/View/Projection
     private final float[] mMVPMatrix = new float[16];
@@ -52,6 +54,10 @@ public class MenuRenderer implements GLSurfaceView.Renderer {
 
         square = new Square(mView.getWidth(), mView.getHeight(), false);
         square.init();
+
+        squareMenu = new SquareMenu(mView.getWidth(), mView.getHeight());
+        squareMenu.init();
+        squareMenu.setPosition(0, 1);
     }
 
     /* Deuxième méthode équivalente à la fonction Display */
@@ -73,6 +79,11 @@ public class MenuRenderer implements GLSurfaceView.Renderer {
             Matrix.multiplyMM(scratch, 0, mMVPMatrix, 0, mModelMatrix, 0);
             square.draw(scratch, 0);
         }
+
+        Matrix.setIdentityM(mModelMatrix,0);
+        Matrix.translateM(mModelMatrix, 0, squareMenu.getPosGlX(), squareMenu.getPosGlY(), 0);
+        Matrix.multiplyMM(scratch, 0, mMVPMatrix, 0, mModelMatrix, 0);
+        squareMenu.draw(scratch, 0);
     }
 
     /* équivalent au Reshape en OpenGLSL */
