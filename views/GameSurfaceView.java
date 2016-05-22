@@ -7,6 +7,7 @@ package fr.univ_orleans.info.tetrisgl.views;
 import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.view.MotionEvent;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import fr.univ_orleans.info.tetrisgl.models.Game;
@@ -19,18 +20,20 @@ public class GameSurfaceView extends GLSurfaceView {
     private final GameRenderer mRenderer;
     private Game mGame;
     private Context context;
+    private TextView mLabelView;
 
     private float lastX = 0.0f;
     private float lastY = 0.0f;
     private boolean moved = false;
 
-    public GameSurfaceView(Context context) {
+    public GameSurfaceView(Context context, TextView labelView) {
         super(context);
 
         this.context = context;
         // Création d'un context OpenGLES 2.0
         setEGLContextClientVersion(2);
 
+        mLabelView = labelView;
         mGame = new Game(this);
 
         // Création du renderer qui va être lié au conteneur View créé
@@ -89,13 +92,8 @@ public class GameSurfaceView extends GLSurfaceView {
         return true;
     }
 
-    public void showScore(int score) {
-        int duration = Toast.LENGTH_SHORT;
-        String text_score = "Votre score est de " + Integer.toString(score) + " ! ";
-
-        //marche pas, le context ne semble pas bon
-        //Toast toast = Toast.makeText(context, text_score, duration);
-        //toast.show();
-        System.out.println(text_score);
+    public void updateScore(int score) {
+        String s = "Score : " + Integer.toString(score);
+        mLabelView.setText(s);
     }
 }

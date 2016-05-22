@@ -65,6 +65,7 @@ public class Game {
             //view.showScore(grid.getScore());
             grid.clear();
             grid.init();
+            view.updateScore(0);
         } else if(grid.getCurrentPiece() == null) {
             grid.add_current_piece(next_piece);
             current_piece = next_piece;
@@ -76,6 +77,8 @@ public class Game {
 
             System.out.println("NP = " + Integer.toString(next_piece.getVal()));
             //next_piece.show();
+
+            view.updateScore(grid.getScore());
         }
     }
 
@@ -83,9 +86,9 @@ public class Game {
     public void moveDownDown() {
         while(grid.move_down(false)) {}
         if(grid.is_game_over()) {
-            //view.showScore(grid.getScore());
             grid.clear();
             grid.init();
+            view.updateScore(0);
         } else {
             grid.add_current_piece(next_piece);
             current_piece = next_piece;
@@ -96,6 +99,7 @@ public class Game {
 
             System.out.println("NP = " + Integer.toString(next_piece.getVal()));
             //next_piece.show();
+            view.updateScore(grid.getScore());
         }
     }
 
