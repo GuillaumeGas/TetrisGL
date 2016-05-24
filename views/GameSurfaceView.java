@@ -10,6 +10,7 @@ import android.view.MotionEvent;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import fr.univ_orleans.info.tetrisgl.controllers.GameActivity;
 import fr.univ_orleans.info.tetrisgl.models.Game;
 
 /**
@@ -19,7 +20,7 @@ public class GameSurfaceView extends GLSurfaceView {
 
     private final GameRenderer mRenderer;
     private Game mGame;
-    private Context context;
+    private GameActivity context;
     private TextView mLabelView;
 
     private float lastX = 0.0f;
@@ -29,7 +30,7 @@ public class GameSurfaceView extends GLSurfaceView {
     public GameSurfaceView(Context context, TextView labelView) {
         super(context);
 
-        this.context = context;
+        this.context = (GameActivity) context;
         // Création d'un context OpenGLES 2.0
         setEGLContextClientVersion(2);
 
@@ -93,7 +94,7 @@ public class GameSurfaceView extends GLSurfaceView {
     }
 
     public void updateScore(int score) {
-        String s = "Score : " + Integer.toString(score);
-        mLabelView.setText(s);
+
+        context.setScore(score);
     }
 }

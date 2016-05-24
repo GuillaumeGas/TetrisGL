@@ -7,6 +7,7 @@ import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import fr.univ_orleans.info.tetrisgl.models.Scores;
 import fr.univ_orleans.info.tetrisgl.views.GameSurfaceView;
 
 public class GameActivity extends Activity {
@@ -34,5 +35,27 @@ public class GameActivity extends Activity {
         mLayout.addView(mLabelView);
         mLayout.addView(mGLView);
         setContentView(mLayout);
+    }
+
+    public void setScore(final int score) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                String s = "Score : " + Integer.toString(score);
+                mLabelView.setText(s);
+            }
+        });
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        Scores.getInstance().save(this);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Scores.getInstance().save(this);
     }
 }

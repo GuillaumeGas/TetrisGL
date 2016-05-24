@@ -62,7 +62,7 @@ public class Game {
     public void moveDown() {
         grid.move_down(true);
         if(grid.is_game_over()) {
-            //view.showScore(grid.getScore());
+            Scores.getInstance().addScore(grid.getScore());
             grid.clear();
             grid.init();
             view.updateScore(0);
@@ -86,6 +86,7 @@ public class Game {
     public void moveDownDown() {
         while(grid.move_down(false)) {}
         if(grid.is_game_over()) {
+            Scores.getInstance().addScore(grid.getScore());
             grid.clear();
             grid.init();
             view.updateScore(0);

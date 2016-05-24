@@ -8,6 +8,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 
 import fr.univ_orleans.info.tetrisgl.R;
+import fr.univ_orleans.info.tetrisgl.models.Scores;
 
 public class MenuActivity extends Activity implements View.OnClickListener {
 
@@ -22,14 +23,28 @@ public class MenuActivity extends Activity implements View.OnClickListener {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.menu_layout);
 
-        Button b = (Button) findViewById(R.id.button);
-        b.setOnClickListener(this);
+        Scores.getInstance().init(this);
+
+        Button bStart = (Button) findViewById(R.id.button);
+        Button bScore = (Button) findViewById(R.id.button2);
+        bStart.setOnClickListener(this);
+        bScore.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
-        Intent intent = new Intent(this, GameActivity.class);
-        this.startActivity(intent);
+        Intent intent;
+        switch (v.getId()) {
+            case R.id.button:
+                intent = new Intent(this, GameActivity.class);
+                this.startActivity(intent);
+                break;
+            case R.id.button2:
+                intent = new Intent(this, ScoreActivity.class);
+                this.startActivity(intent);
+                break;
+        }
+
     }
 
 }
