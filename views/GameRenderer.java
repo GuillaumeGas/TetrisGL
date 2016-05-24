@@ -86,12 +86,16 @@ public class GameRenderer implements GLSurfaceView.Renderer {
             }
         }
 
+        /* ERREUR ICI : Le numéro de la pièce ne correspond pas à celle qui est affichée...  */
+
         /* On affiche la prochaine piece */
         Piece piece = mGame.getNextPiece();
         int[][] piece_grid = piece.get_grid();
 
+        //Nous permet d'avoir une pièce centrée
         boolean check = false;
         for(int i = 0; i < piece.SIZE_PIECE; i++) { if( piece_grid[i][0] != 0) check = true; }
+
         int y = 1;
         for(int i = 0; i < piece.SIZE_PIECE; i++) {
             int x = mGame.getGrid().getWidth() + (check ? 0 : 1);

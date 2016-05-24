@@ -53,9 +53,4 @@ public class GameActivity extends Activity {
         Scores.getInstance().save(this);
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        Scores.getInstance().save(this);
-    }
 }

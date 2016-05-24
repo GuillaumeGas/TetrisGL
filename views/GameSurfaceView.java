@@ -94,7 +94,6 @@ public class GameSurfaceView extends GLSurfaceView {
     }
 
     public void updateScore(int score) {
-
         context.setScore(score);
     }
 }

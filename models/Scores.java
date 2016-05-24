@@ -45,7 +45,6 @@ public class Scores {
             if (mIn != null)
                 mIn.close();
         } catch (FileNotFoundException e) {
-            System.out.println("FILE NOT FOUND");
         } catch (IOException e) {
             e.printStackTrace();
         }

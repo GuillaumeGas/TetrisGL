@@ -34,8 +34,8 @@ public class Game {
         next_piece = new Piece();
         grid.add_current_piece(current_piece);
 
-        System.out.println("[START]\nCP = " + Integer.toString(current_piece.getVal()));
-        System.out.println("NP = " + Integer.toString(next_piece.getVal()));
+        //System.out.println("[START] CP = " + Integer.toString(current_piece.getVal()));
+        //System.out.println("[START] NP = " + Integer.toString(next_piece.getVal()));
 
         start();
     }
@@ -69,15 +69,9 @@ public class Game {
         } else if(grid.getCurrentPiece() == null) {
             grid.add_current_piece(next_piece);
             current_piece = next_piece;
-
-            System.out.println("CP = " + Integer.toString(current_piece.getVal()));
-            //current_piece.show();
-
+            //System.out.println("CP = " + Integer.toString(current_piece.getVal()));
             next_piece = new Piece();
-
-            System.out.println("NP = " + Integer.toString(next_piece.getVal()));
-            //next_piece.show();
-
+            //System.out.println("NP = " + Integer.toString(next_piece.getVal()));
             view.updateScore(grid.getScore());
         }
     }
@@ -93,13 +87,9 @@ public class Game {
         } else {
             grid.add_current_piece(next_piece);
             current_piece = next_piece;
-            System.out.println("CP = " + Integer.toString(current_piece.getVal()));
-            //current_piece.show();
-
+            //System.out.println("CP = " + Integer.toString(current_piece.getVal()));
             next_piece = new Piece();
-
-            System.out.println("NP = " + Integer.toString(next_piece.getVal()));
-            //next_piece.show();
+            //System.out.println("NP = " + Integer.toString(next_piece.getVal()));
             view.updateScore(grid.getScore());
         }
     }
